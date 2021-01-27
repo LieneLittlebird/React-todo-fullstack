@@ -1,9 +1,9 @@
-import "./App.css";
 import React from "react";
+import Header from "./components/Header";
 
 const App = () => (
-  <div className="App">
-    <h1>Hello from React!</h1>
+  <div className="container">
+    <Header title="Task tracker" />
   </div>
 );
 
