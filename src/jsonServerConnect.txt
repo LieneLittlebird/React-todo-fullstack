@@ -1,19 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Tasks from "./components/Tasks";
-import AddTask from "./components/AddTask";
-import About from "./components/About";
-import { EXPRESS_API } from "./constants";
-
-const App = () => {
-  const [showAddTask, setShowAddTask] = useState(true);
-  const [tasks, setTasks] = useState([]);
-
-  // Fetch Tasks
+// Fetch Tasks
   const fetchTasks = async () => {
     const res = await fetch(`${EXPRESS_API}/tasks`);
     const data = await res.json();
@@ -75,46 +60,3 @@ const App = () => {
     });
 
     const data = await res.json();
-
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, reminder: !data.reminder } : task
-      )
-    );
-  };
-
-  return (
-    <Router>
-      <div className="container">
-        <Header
-          title="Task tracker"
-          onAdd={() => setShowAddTask(!showAddTask)}
-          showAdd={showAddTask}
-        />
-
-        <Route
-          exact
-          path="/"
-          render={(props) => (
-            <>
-              {showAddTask && <AddTask onAdd={addTask} />}
-              {tasks.length > 0 ? (
-                <Tasks
-                  tasks={tasks}
-                  onDelete={deleteTask}
-                  onToggle={toggleReminder}
-                />
-              ) : (
-                "No Tasks to Show"
-              )}
-            </>
-          )}
-        />
-
-        <Route path="/about" component={About} />
-        <Footer />
-      </div>
-    </Router>
-  );
-};
-export default App;
