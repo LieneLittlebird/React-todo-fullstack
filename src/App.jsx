@@ -22,7 +22,7 @@ const App = () => {
 
   // Fetch Task
   const fetchTask = async (id) => {
-    const res = await fetch(`${EXPRESS_API}/tasks/${id}`);
+    const res = await fetch(`${EXPRESS_API}/task/${id}`);
     const data = await res.json();
     return data;
   };
@@ -96,6 +96,7 @@ const App = () => {
               {showAddTask && <AddTask onAdd={addTask} />}
               {tasks.length > 0 ? (
                 <Tasks
+                  key={tasks.id}
                   tasks={tasks}
                   onDelete={deleteTask}
                   onToggle={toggleReminder}
