@@ -10,6 +10,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.post("/tasks", async (req, res) => {
+  const client = await MongoClient.connect(MONGO_DB_API, {
+    useUnifiedTopology: true,
+  });
+  const db = client.db("tasks");
+  const postsCollection = db.collection("tasks_saved");
+  await postsCollection.insertOne(req.body);
+
+  client.close();
+
+  res.send("Task added");
+});
+
 app.get("/tasks", async (req, res) => {
   const client = await MongoClient.connect(MONGO_DB_API, {
     useUnifiedTopology: true,
@@ -22,30 +35,17 @@ app.get("/tasks", async (req, res) => {
   });
 });
 
-app.post("/tasks", async (req, res) => {
+app.delete("/tasks/:id", async (req, res, id) => {
   const client = await MongoClient.connect(MONGO_DB_API, {
     useUnifiedTopology: true,
   });
   const db = client.db("tasks");
   const postsCollection = db.collection("tasks_saved");
-  await postsCollection.insertOne(req.body);
+  await postsCollection.deleteOne({ id });
 
   client.close();
 
-  res.send("Post added successfully");
-});
-
-app.delete("/tasks/:id", async (req, res) => {
-  const client = await MongoClient.connect(MONGO_DB_API, {
-    useUnifiedTopology: true,
-  });
-  const db = client.db("tasks");
-  const postsCollection = db.collection("tasks_saved");
-  await postsCollection.deleteOne({});
-
-  client.close();
-
-  res.send("Post deleted successfully");
+  res.send();
 });
 
 // app.put("/tasks/:id", async (req, res) => {

@@ -45,15 +45,17 @@ const App = () => {
       body: JSON.stringify(task),
     });
 
-    const data = await res.json;
-    setTasks([...tasks, data]);
+    setTasks([...tasks, task]);
   };
 
   // Delete Task
   const deleteTask = async (id) => {
+    // const id = Math.floor(Math.random() * 10000) + 1;
+
     await fetch(`${EXPRESS_API}/tasks/${id}`, {
       method: "DELETE",
     });
+
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
@@ -96,7 +98,6 @@ const App = () => {
               {showAddTask && <AddTask onAdd={addTask} />}
               {tasks.length > 0 ? (
                 <Tasks
-                  key={tasks.id}
                   tasks={tasks}
                   onDelete={deleteTask}
                   onToggle={toggleReminder}

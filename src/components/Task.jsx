@@ -19,3 +19,5 @@ const Task = ({ task, onDelete, onToggle }) => (
   </div>
 );
 export default Task;
+
+// const id = Math.floor(Math.random() * 10000) + 1;
