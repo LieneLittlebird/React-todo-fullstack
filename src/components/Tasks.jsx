@@ -5,7 +5,13 @@ import Task from "./Task";
 const Tasks = ({ tasks, onDelete, onToggle }) => (
   <div>
     {tasks.map((task) => (
-      <Task key={task.id} task={task} onDelete={onDelete} onToggle={onToggle} />
+      <Task
+        // eslint-disable-next-line no-underscore-dangle
+        key={task._id}
+        task={task}
+        onDelete={onDelete}
+        onToggle={onToggle}
+      />
     ))}
   </div>
 );

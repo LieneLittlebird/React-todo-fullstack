@@ -4,20 +4,21 @@ import { FaTimes } from "react-icons/fa";
 
 const Task = ({ task, onDelete, onToggle }) => (
   <div
-    key={task.id}
+    // eslint-disable-next-line no-underscore-dangle
+    key={task._id}
     className={`task ${task.reminder ? "reminder" : ""}`}
-    onDoubleClick={() => onToggle(task.id)}
+    // eslint-disable-next-line no-underscore-dangle
+    onDoubleClick={() => onToggle(task._id)}
   >
     <h3 key="task-title">
       {task.text}{" "}
       <FaTimes
         style={{ color: "red", cursor: "pointer" }}
-        onClick={() => onDelete(task.id)}
+        // eslint-disable-next-line no-underscore-dangle
+        onClick={() => onDelete(task._id)}
       />
     </h3>
     <p key="task-day">{task.day}</p>
   </div>
 );
 export default Task;
-
-// const id = Math.floor(Math.random() * 10000) + 1;

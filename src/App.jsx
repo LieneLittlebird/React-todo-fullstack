@@ -44,19 +44,22 @@ const App = () => {
       },
       body: JSON.stringify(task),
     });
+    const id = await res.json();
 
-    setTasks([...tasks, task]);
+    setTasks([...tasks, { ...task, _id: id }]);
   };
 
   // Delete Task
   const deleteTask = async (id) => {
+    console.log(id, tasks);
     // const id = Math.floor(Math.random() * 10000) + 1;
 
     await fetch(`${EXPRESS_API}/tasks/${id}`, {
       method: "DELETE",
     });
 
-    setTasks(tasks.filter((task) => task.id !== id));
+    // eslint-disable-next-line no-underscore-dangle
+    setTasks(tasks.filter((task) => task._id !== id));
   };
 
   // Toggle Reminder. PUT - update
@@ -76,7 +79,8 @@ const App = () => {
 
     setTasks(
       tasks.map((task) =>
-        task.id === id ? { ...task, reminder: !data.reminder } : task
+        // eslint-disable-next-line no-underscore-dangle
+        task._id === id ? { ...task, reminder: !data.reminder } : task
       )
     );
   };

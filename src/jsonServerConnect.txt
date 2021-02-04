@@ -43,7 +43,7 @@
     await fetch(`http://localhost:8000/tasks/${id}`, {
       method: "DELETE",
     });
-    setTasks(tasks.filter((task) => task.id !== id));
+    setTasks(tasks.filter((task) => task_id !== id));
   };
 
   // Toggle Reminder. PUT - update
