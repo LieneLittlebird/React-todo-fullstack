@@ -56,8 +56,7 @@ app.delete("/tasks/:id", async (req, res) => {
 });
 
 app.put("/tasks/:id", async (req, res) => {
-  console.log(req.params.id);
-  const { id } = req.params.id;
+  const { id } = req.params;
 
   const client = await MongoClient.connect(MONGO_DB_API, {
     useUnifiedTopology: true,
@@ -65,7 +64,12 @@ app.put("/tasks/:id", async (req, res) => {
 
   const db = client.db("tasks");
   const postsCollection = db.collection("tasks_saved");
-  await postsCollection.updateOne({ id });
+  const reminder = req.params;
+  await postsCollection.updateOne(
+    { id },
+    { $set: { reminder: !reminder } },
+    { upsert: false }
+  );
 
   client.close();
 
