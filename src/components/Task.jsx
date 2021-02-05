@@ -7,8 +7,10 @@ const Task = ({ task, onDelete, onToggle }) => (
     // eslint-disable-next-line no-underscore-dangle
     key={task._id}
     className={`task ${task.reminder ? "reminder" : ""}`}
-    // eslint-disable-next-line no-underscore-dangle
-    onDoubleClick={() => onToggle(task._id)}
+    onDoubleClick={() => {
+      // eslint-disable-next-line no-underscore-dangle
+      onToggle(task);
+    }}
   >
     <h3 key="task-title">
       {task.text}{" "}

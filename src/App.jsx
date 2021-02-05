@@ -20,12 +20,12 @@ const App = () => {
     return data;
   };
 
-  // Fetch Task
-  const fetchTask = async (id) => {
-    const res = await fetch(`${EXPRESS_API}/task/${id}`);
-    const data = await res.json();
-    return data;
-  };
+  // // Fetch Task - GET request
+  // const fetchTask = async (id) => {
+  //   const res = await fetch(`${EXPRESS_API}/task/${id}`);
+  //   const data = await res.json();
+  //   return data;
+  // };
   // UseEffect izmanto, ja grib, lai kaut kas notiek, ielādējot lapu
   useEffect(() => {
     const getTasks = async () => {
@@ -51,9 +51,6 @@ const App = () => {
 
   // Delete Task
   const deleteTask = async (id) => {
-    console.log(id, tasks);
-    // const id = Math.floor(Math.random() * 10000) + 1;
-
     await fetch(`${EXPRESS_API}/tasks/${id}`, {
       method: "DELETE",
     });
@@ -63,11 +60,11 @@ const App = () => {
   };
 
   // Toggle Reminder. PUT - update
-  const toggleReminder = async (id) => {
-    const taskToToggle = await fetchTask(id);
+  const toggleReminder = async (taskToToggle) => {
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
 
-    const res = await fetch(`${EXPRESS_API}/tasks/${id}`, {
+    // eslint-disable-next-line no-underscore-dangle
+    const res = await fetch(`${EXPRESS_API}/tasks/${taskToToggle._id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -80,9 +77,12 @@ const App = () => {
     setTasks(
       tasks.map((task) =>
         // eslint-disable-next-line no-underscore-dangle
-        task._id === id ? { ...task, reminder: !data.reminder } : task
+        task._id === taskToToggle._id
+          ? { ...task, reminder: !data.reminder }
+          : task
       )
     );
+    // console.log(taskToToggle);
   };
 
   return (

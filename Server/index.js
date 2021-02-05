@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-console */
 const express = require("express");
 const cors = require("cors");
 const { MongoClient } = require("mongodb");
@@ -11,19 +13,20 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/tasks", async (req, res) => {
+  // eslint-disable-next-line no-use-before-define
   const client = await MongoClient.connect(MONGO_DB_API, {
     useUnifiedTopology: true,
   });
   const db = client.db("tasks");
   const postsCollection = db.collection("tasks_saved");
-  const mongoDBResult = await postsCollection.insertOne(req.body);
+  await postsCollection.insertOne(req.body);
 
   client.close();
 
   // eslint-disable-next-line no-underscore-dangle
-  const id = mongoDBResult.ops[0]._id;
+  // const id = mongoDBResult.ops[0]._id;
 
-  res.send("Task added", id);
+  res.send(JSON.stringify("Task added"));
 });
 
 app.get("/tasks", async (req, res) => {
@@ -38,7 +41,8 @@ app.get("/tasks", async (req, res) => {
   });
 });
 
-app.delete("/tasks/:id", async (req, res, id) => {
+app.delete("/tasks/:id", async (req, res) => {
+  const { id } = req.params.id;
   const client = await MongoClient.connect(MONGO_DB_API, {
     useUnifiedTopology: true,
   });
@@ -48,20 +52,24 @@ app.delete("/tasks/:id", async (req, res, id) => {
 
   client.close();
 
-  res.send(req.body);
+  res.send(JSON.stringify("Task deleted"));
 });
 
-app.put("/tasks/:id", async (req, res, id) => {
+app.put("/tasks/:id", async (req, res) => {
+  console.log(req.params.id);
+  const { id } = req.params.id;
+
   const client = await MongoClient.connect(MONGO_DB_API, {
     useUnifiedTopology: true,
   });
+
   const db = client.db("tasks");
   const postsCollection = db.collection("tasks_saved");
   await postsCollection.updateOne({ id });
 
   client.close();
 
-  res.send();
+  res.send("Put successful");
 });
 
 const port = 8080;
