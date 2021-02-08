@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 const express = require("express");
@@ -56,8 +58,6 @@ app.delete("/tasks/:id", async (req, res) => {
 });
 
 app.put("/tasks/:id", async (req, res) => {
-  const { id } = req.params;
-
   const client = await MongoClient.connect(MONGO_DB_API, {
     useUnifiedTopology: true,
   });
@@ -65,11 +65,14 @@ app.put("/tasks/:id", async (req, res) => {
   const db = client.db("tasks");
   const postsCollection = db.collection("tasks_saved");
   const reminder = req.params;
-  await postsCollection.updateOne(
-    { id },
-    { $set: { reminder: !reminder } },
-    { upsert: false }
-  );
+
+  const { id } = req.params;
+  const update = {
+    reminder: { $exists: true },
+    $set: !reminder,
+  };
+  const options = { upsert: false };
+  await postsCollection.updateOne({ id }, update, options);
 
   client.close();
 

@@ -20,12 +20,6 @@ const App = () => {
     return data;
   };
 
-  // // Fetch Task - GET request
-  // const fetchTask = async (id) => {
-  //   const res = await fetch(`${EXPRESS_API}/task/${id}`);
-  //   const data = await res.json();
-  //   return data;
-  // };
   // UseEffect izmanto, ja grib, lai kaut kas notiek, ielādējot lapu
   useEffect(() => {
     const getTasks = async () => {
