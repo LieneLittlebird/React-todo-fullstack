@@ -58,7 +58,7 @@ const App = () => {
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
 
     // eslint-disable-next-line no-underscore-dangle
-    const res = await fetch(`${EXPRESS_API}/tasks/${taskToToggle._id}`, {
+    await fetch(`${EXPRESS_API}/tasks/${taskToToggle._id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -66,13 +66,13 @@ const App = () => {
       body: JSON.stringify(updTask),
     });
 
-    const data = await res.json();
+    // const data = await res.json();
 
     setTasks(
       tasks.map((task) =>
         // eslint-disable-next-line no-underscore-dangle
         task._id === taskToToggle._id
-          ? { ...task, reminder: !data.reminder }
+          ? updTask
           : task
       )
     );
@@ -91,7 +91,7 @@ const App = () => {
         <Route
           exact
           path="/"
-          render={(props) => (
+          render={() => (
             <>
               {showAddTask && <AddTask onAdd={addTask} />}
               {tasks.length > 0 ? (

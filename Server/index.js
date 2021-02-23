@@ -4,12 +4,45 @@
 /* eslint-disable no-console */
 const express = require("express");
 const cors = require("cors");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
+const { useDebugValue } = require("react");
 
 const MONGO_DB_PORT = 27017;
 const MONGO_DB_API = `mongodb://localhost:${MONGO_DB_PORT}`;
 
 const app = express();
+
+// const wr = async () => {
+//   // hgfhgf
+//   const client = await MongoClient.connect(MONGO_DB_API, {
+//     useUnifiedTopology: true,
+//   });
+
+//   const db = client.db("tasks");
+//   const postsCollection = db.collection("tasks_saved");
+
+//   // const { id } = req.params.id;
+
+//   // const reminder = req.params.value;
+
+//   const id = "6034ce473a72f60384624034";
+//   const reminder = true;
+
+//   const update = {
+//     $set: { reminder: reminder },
+//   };
+
+//   const options = { upsert: false };
+//   const res = await postsCollection.updateOne(
+//     { _id: ObjectId(id) },
+//     update,
+//     options
+//   );
+//   console.log(res);
+//   client.close();
+// };
+
+// wr();
 
 app.use(express.json());
 app.use(cors());
@@ -64,19 +97,29 @@ app.put("/tasks/:id", async (req, res) => {
 
   const db = client.db("tasks");
   const postsCollection = db.collection("tasks_saved");
-  const reminder = req.params;
 
-  const { id } = req.params;
+  const id = req.body._id;
+  const reminder = req.body.reminder;
+
   const update = {
-    reminder: { $exists: true },
-    $set: !reminder,
+    $set: { reminder },
   };
+
   const options = { upsert: false };
-  await postsCollection.updateOne({ id }, update, options);
+  await postsCollection.updateOne({ _id: ObjectId(id) }, update, options);
+
+  /* .findAndModify ({
+  sort: id,
+  remove: true,
+  update: {id},
+  new: yes,
+  upsert: false,
+
+})*/
 
   client.close();
 
-  res.send("Put successful");
+  res.send("Updated successfully");
 });
 
 const port = 8080;
