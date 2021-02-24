@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
+
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Header from "./components/Header";
@@ -13,14 +12,20 @@ const App = () => {
   const [showAddTask, setShowAddTask] = useState(true);
   const [tasks, setTasks] = useState([]);
 
-  // Fetch Tasks
+  // Fetch Tasks GET
+
   const fetchTasks = async () => {
-    const res = await fetch(`${EXPRESS_API}/tasks`);
+    const res = await fetch(`${EXPRESS_API}/tasks`, {
+      method: 'GET',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json', 
+    }});
     const data = await res.json();
     return data;
+
   };
 
-  // UseEffect izmanto, ja grib, lai kaut kas notiek, ielādējot lapu
   useEffect(() => {
     const getTasks = async () => {
       const tasksFromServer = await fetchTasks();
@@ -49,7 +54,6 @@ const App = () => {
       method: "DELETE",
     });
 
-    // eslint-disable-next-line no-underscore-dangle
     setTasks(tasks.filter((task) => task._id !== id));
   };
 
@@ -57,7 +61,6 @@ const App = () => {
   const toggleReminder = async (taskToToggle) => {
     const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
 
-    // eslint-disable-next-line no-underscore-dangle
     await fetch(`${EXPRESS_API}/tasks/${taskToToggle._id}`, {
       method: "PUT",
       headers: {
@@ -66,17 +69,14 @@ const App = () => {
       body: JSON.stringify(updTask),
     });
 
-    // const data = await res.json();
 
     setTasks(
       tasks.map((task) =>
-        // eslint-disable-next-line no-underscore-dangle
         task._id === taskToToggle._id
           ? updTask
           : task
       )
     );
-    // console.log(taskToToggle);
   };
 
   return (
